@@ -988,6 +988,134 @@
 
   @keyframes tempPulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
   .temp-pulse { animation: tempPulse 2s ease-in-out infinite; }
+
+  /* ─── PRODUCT SPOTLIGHT ──────────────────────────── */
+  .spotlight-section {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(242,148,47,0.06) 0%, transparent 60%),
+      var(--bg);
+    padding: 100px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .spotlight-section::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(242,148,47,0.2) 30%, rgba(242,148,47,0.2) 70%, transparent);
+  }
+  .spotlight-header {
+    max-width: 600px;
+    margin: 0 auto 56px;
+  }
+  .spotlight-image-wrap {
+    position: relative;
+    display: inline-block;
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto 64px;
+  }
+  .spotlight-image-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(242,148,47,0.25), rgba(242,148,47,0.05) 50%, rgba(255,255,255,0.04));
+    z-index: 0;
+  }
+  .spotlight-image-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: 10%;
+    right: 10%;
+    height: 80px;
+    background: radial-gradient(ellipse, rgba(242,148,47,0.18) 0%, transparent 70%);
+    filter: blur(20px);
+    z-index: -1;
+  }
+  .spotlight-image {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    border-radius: 22px;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow:
+      0 40px 80px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(242,148,47,0.1),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .spotlight-callouts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .spotlight-callout {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.25s, box-shadow 0.3s;
+  }
+  .spotlight-callout::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(242,148,47,0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .spotlight-callout:hover {
+    border-color: rgba(242,148,47,0.28);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3), 0 0 20px rgba(242,148,47,0.07);
+  }
+  .spotlight-callout:hover::before { opacity: 1; }
+  .spotlight-callout-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(242,148,47,0.12);
+    border: 1px solid rgba(242,148,47,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: var(--orange);
+  }
+  .spotlight-callout-dot svg { width: 18px; height: 18px; }
+  .spotlight-callout-title {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .spotlight-callout-desc {
+    font-size: 13px;
+    color: var(--text-sec);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  @keyframes spotlightReveal {
+    from { opacity: 0; transform: translateY(32px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .spotlight-animate {
+    opacity: 0;
+    animation: spotlightReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
 </style>
 </head>
 <body>
@@ -1125,6 +1253,58 @@
           <span class="product-card-link">Explore Entry Doors &rarr;</span>
         </div>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCT SPOTLIGHT ══════════════════════════════ -->
+<section class="spotlight-section">
+  <div class="container">
+    <div class="spotlight-header">
+      <span class="section-label">Engineered Detail</span>
+      <h2 class="section-title">See the difference<br>up close.</h2>
+      <p class="section-sub" style="margin:0 auto">Every feature on an MP Doors frame exists to solve a specific failure point. No filler. No compromise.</p>
+    </div>
+
+    <div class="spotlight-image-wrap spotlight-animate" style="animation-delay:0.1s">
+      <img
+        src="tech-visual-3d.png"
+        alt="MP Doors patio door with callout annotations: 100% Waterproof, Composite Frame, Energy Efficient"
+        class="spotlight-image"
+      />
+    </div>
+
+    <div class="spotlight-callouts">
+      <div class="spotlight-callout spotlight-animate" style="animation-delay:0.25s">
+        <div class="spotlight-callout-dot">
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M10 2C7 5 4 8 4 12a6 6 0 0012 0c0-4-3-7-6-10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="spotlight-callout-title">100% Waterproof</div>
+        <div class="spotlight-callout-desc">No rot. No swelling. No replacement. The frame that outlasts the home it's built into.</div>
+      </div>
+      <div class="spotlight-callout spotlight-animate" style="animation-delay:0.38s">
+        <div class="spotlight-callout-dot">
+          <svg viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="2" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="6" y="5" width="4" height="4" rx="0.5" stroke="currentColor" stroke-width="1"/>
+            <rect x="10" y="5" width="4" height="4" rx="0.5" stroke="currentColor" stroke-width="1"/>
+            <rect x="6" y="11" width="8" height="4" rx="0.5" stroke="currentColor" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="spotlight-callout-title">Composite Frame</div>
+        <div class="spotlight-callout-desc">Stays square in any climate. Lifetime warranty — for as long as you own your home.</div>
+      </div>
+      <div class="spotlight-callout spotlight-animate" style="animation-delay:0.51s">
+        <div class="spotlight-callout-dot">
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M10 2v4M10 14v4M4.93 4.93l2.83 2.83M12.24 12.24l2.83 2.83M2 10h4M14 10h4M4.93 15.07l2.83-2.83M12.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="spotlight-callout-title">Energy Efficient</div>
+        <div class="spotlight-callout-desc">Energy Star certified in all U.S. climate zones. Lower bills, every season.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1407,6 +1587,21 @@
 </footer>
 
 <script>
+  // Spotlight scroll reveal
+  const spotlightEls = document.querySelectorAll('.spotlight-animate');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.animationPlayState = 'running';
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  spotlightEls.forEach(el => {
+    el.style.animationPlayState = 'paused';
+    revealObs.observe(el);
+  });
+
   // Nav scroll effect
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
