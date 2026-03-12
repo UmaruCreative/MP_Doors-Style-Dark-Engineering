@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MP Doors — Engineered Future</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #F2942F;
+    --orange-dim: #C4721A;
+    --orange-glow: rgba(242,148,47,0.15);
+    --orange-glow-soft: rgba(242,148,47,0.08);
+    --bg: #08080C;
+    --surface: #12121A;
+    --surface-mid: #1C1C28;
+    --text: #F5F4F0;
+    --text-sec: #9B9AA6;
+    --text-muted: #5C5B66;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --glass-border-hover: rgba(242,148,47,0.3);
+    --font-head: 'Figtree', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(18,18,26,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .nav-logo-text {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .nav-logo-text span { color: var(--orange); }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-sec);
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--orange);
+    color: #fff !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.02em;
+    box-shadow: 0 0 20px rgba(242,148,47,0.3);
+    transition: background 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-cta:hover {
+    background: var(--orange-dim) !important;
+    box-shadow: 0 0 30px rgba(242,148,47,0.4) !important;
+  }
+
+  /* ─── HERO ────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 40px 120px;
+    overflow: hidden;
+    background: radial-gradient(
+      ellipse 100% 60% at 50% 100%,
+      rgba(242,148,47,0.10) 0%,
+      rgba(26,13,0,0.25) 40%,
+      var(--bg) 70%
+    ), var(--bg);
+  }
+
+  /* Arc element */
+  .hero-arc {
+    position: absolute;
+    bottom: -72%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 190vw;
+    height: 190vw;
+    border-radius: 50%;
+    border: 1.5px solid rgba(242,148,47,0.35);
+    box-shadow:
+      0 0 80px rgba(242,148,47,0.12),
+      0 0 200px rgba(242,148,47,0.06),
+      inset 0 0 100px rgba(242,148,47,0.03);
+    pointer-events: none;
+    animation: arcPulse 8s ease-in-out infinite;
+  }
+  .hero-arc::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(242,148,47,0.15);
+  }
+  .hero-arc-glow {
+    position: absolute;
+    top: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 55%;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(242,148,47,0.7) 15%,
+      #F2942F 50%,
+      rgba(242,148,47,0.7) 85%,
+      transparent
+    );
+    filter: blur(0.8px);
+    box-shadow: 0 0 24px 10px rgba(242,148,47,0.28);
+    animation: glowPulse 8s ease-in-out infinite;
+  }
+  @keyframes arcPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; filter: blur(0.5px); }
+  }
+
+  /* Star field dots */
+  .hero-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-dots::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 10%, rgba(255,255,255,0.35) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 30%, rgba(242,148,47,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,0.25) 0%, transparent 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    animation: fadeUp 0.8s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-label {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(242,148,47,0.1);
+    border: 1px solid rgba(242,148,47,0.25);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero h1 {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: clamp(44px, 7vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--orange);
+    text-shadow: 0 0 40px rgba(242,148,47,0.4);
+  }
+  .hero-sub {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-sec);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 40px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 30px rgba(242,148,47,0.35);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover {
+    background: var(--orange-dim);
+    box-shadow: 0 0 40px rgba(242,148,47,0.5);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    backdrop-filter: blur(8px);
+  }
+  .btn-secondary:hover {
+    border-color: rgba(242,148,47,0.5);
+    background: rgba(242,148,47,0.05);
+    transform: translateY(-1px);
+  }
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+  .hero-trust-item {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hero-trust-item::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--orange);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  .hero-trust-sep {
+    width: 1px;
+    height: 14px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  /* ─── TRUST BAR ───────────────────────────────────── */
+  .trust-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 48px;
+    flex: 1;
+    justify-content: center;
+    max-width: 360px;
+  }
+  .trust-item + .trust-item {
+    border-left: 1px solid var(--glass-border);
+  }
+  .trust-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--orange);
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+  .trust-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-sec);
+    letter-spacing: 0.01em;
+  }
+  .trust-text strong { color: var(--text); font-weight: 600; }
+
+  /* ─── SECTION SHARED ─────────────────────────────── */
+  section { padding: 100px 40px; }
+  .section-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-sec);
+    line-height: 1.6;
+    font-weight: 300;
+    max-width: 560px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ─── PROBLEM SECTION ────────────────────────────── */
+  .problem-section {
+    background: var(--bg);
+    text-align: center;
+    padding: 80px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .problem-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 100%, rgba(242,148,47,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .problem-text {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .problem-hook {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+  .problem-body {
+    font-size: 16px;
+    color: var(--text-sec);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+  .problem-body p + p { margin-top: 14px; }
+
+  /* ─── PRODUCT CARDS ──────────────────────────────── */
+  .products-section {
+    background:
+      radial-gradient(ellipse at 30% 70%, rgba(28,28,40,0.8) 0%, transparent 70%),
+      #10101A;
+    padding: 100px 40px;
+  }
+  .products-header {
+    margin-bottom: 56px;
+  }
+  .product-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .product-card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.25s;
+    display: block;
+  }
+  .product-card:hover {
+    border-color: var(--glass-border-hover);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 30px rgba(242,148,47,0.1);
+    transform: translateY(-4px);
+  }
+  .product-card-image {
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(135deg, #1C1C28 0%, #0F0F18 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .product-card-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8,8,12,0.6) 0%, transparent 50%);
+  }
+  .door-svg {
+    width: 140px;
+    height: 200px;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  }
+  .product-card-glow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 120px;
+    background: radial-gradient(ellipse, rgba(242,148,47,0.15) 0%, transparent 70%);
+    z-index: 0;
+  }
+  .product-card-body {
+    padding: 28px 32px 32px;
+  }
+  .product-card-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .product-card-title {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .product-card-desc {
+    font-size: 14px;
+    color: var(--text-sec);
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .product-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--orange);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: gap 0.2s;
+  }
+  .product-card:hover .product-card-link { gap: 10px; }
+
+  /* ─── TECHNOLOGY SHOWCASE ───────────────────────── */
+  .tech-section {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(242,148,47,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(242,148,47,0.03) 0%, transparent 50%),
+      #0D0D14;
+  }
+  .tech-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 40px;
+    width: fit-content;
+  }
+  .tech-tab {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-sec);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tech-tab.active {
+    background: var(--orange);
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0 0 20px rgba(242,148,47,0.3);
+  }
+  .tech-tab:not(.active):hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+  }
+  .tech-tab-num {
+    font-size: 11px;
+    opacity: 0.6;
+    font-family: 'Courier New', monospace;
+  }
+  .tech-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .tech-panel { display: none; }
+  .tech-panel.active { display: contents; }
+  .tech-visual {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .tech-visual-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .tech-visual-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, rgba(242,148,47,0.12) 0%, transparent 65%);
+  }
+  .tech-visual svg { position: relative; z-index: 1; }
+  .tech-text-wrap {}
+  .tech-headline {
+    font-family: var(--font-head);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .tech-headline em {
+    font-style: normal;
+    color: var(--orange);
+  }
+  .tech-body {
+    font-size: 16px;
+    color: var(--text-sec);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .tech-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tech-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-sec);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  .tech-points li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+    margin-top: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px rgba(242,148,47,0.5);
+  }
+  .tech-points strong { color: var(--text); font-weight: 500; }
+
+  /* ─── REVIEWS ─────────────────────────────────────── */
+  .reviews-section {
+    background: var(--surface);
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .reviews-header {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .reviews-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 56px;
+  }
+  .reviews-stars {
+    color: var(--orange);
+    font-size: 20px;
+    text-shadow: 0 0 10px rgba(242,148,47,0.4);
+    letter-spacing: 2px;
+  }
+  .reviews-stat-text {
+    font-size: 15px;
+    color: var(--text-sec);
+  }
+  .reviews-stat-text strong { color: var(--text); }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .review-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .review-card:hover {
+    border-color: rgba(242,148,47,0.2);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .review-stars {
+    color: var(--orange);
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .review-quote {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.65;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+  .review-quote::before { content: '\201C'; color: var(--orange); font-size: 20px; font-style: normal; }
+  .review-author {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+  }
+  .review-author strong {
+    color: var(--text-sec);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* ─── FAQ ─────────────────────────────────────────── */
+  .faq-section {
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(242,148,47,0.04) 0%, transparent 60%),
+      var(--bg);
+  }
+  .faq-header { margin-bottom: 48px; }
+  .faq-list {
+    max-width: 760px;
+  }
+  .faq-item {
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    background: var(--glass);
+    backdrop-filter: blur(8px);
+  }
+  .faq-item.open {
+    border-color: rgba(242,148,47,0.25);
+    box-shadow: 0 0 20px rgba(242,148,47,0.06);
+  }
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 20px 24px;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+  .faq-item.open .faq-question { color: var(--orange); }
+  .faq-chevron {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: transform 0.3s, color 0.2s;
+  }
+  .faq-item.open .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--orange);
+  }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .faq-answer-inner {
+    padding: 0 24px 20px;
+    font-size: 14px;
+    color: var(--text-sec);
+    line-height: 1.75;
+    font-weight: 300;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 16px;
+  }
+
+  /* ─── HANDOFF SECTION ────────────────────────────── */
+  .handoff-section {
+    background: var(--surface);
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+    padding: 80px 40px;
+  }
+  .handoff-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .handoff-title {
+    font-family: var(--font-head);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .handoff-sub {
+    font-size: 16px;
+    color: var(--text-sec);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  .handoff-checklist {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    text-align: left;
+    margin-bottom: 32px;
+  }
+  .handoff-checklist-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-sec);
+    font-weight: 300;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .checklist-box {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .handoff-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .handoff-phone {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .handoff-phone a {
+    color: var(--orange);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────── */
+  footer {
+    background: #060608;
+    border-top: 1px solid var(--glass-border);
+    padding: 48px 40px 32px;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .footer-brand {}
+  .footer-logo-text {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .footer-logo-text span { color: var(--orange); }
+  .footer-tagline {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.5;
+    max-width: 220px;
+  }
+  .footer-links-group {}
+  .footer-links-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--text-sec);
+    text-decoration: none;
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--orange); }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .footer-certs {
+    display: flex;
+    gap: 16px;
+  }
+  .cert-badge {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 4px 10px;
+  }
+
+  /* ─── WATER DROP ANIMATION ─────────────────────────  */
+  @keyframes dropFall { 0%{transform:translateY(-10px);opacity:0} 20%{opacity:1} 80%{opacity:1} 100%{transform:translateY(60px);opacity:0} }
+  .drop { animation: dropFall 3s infinite ease-in; }
+  .drop:nth-child(2){animation-delay:0.5s}
+  .drop:nth-child(3){animation-delay:1.1s}
+  .drop:nth-child(4){animation-delay:1.7s}
+  .drop:nth-child(5){animation-delay:2.3s}
+
+  @keyframes tempPulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+  .temp-pulse { animation: tempPulse 2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+      <rect width="36" height="36" rx="8" fill="#F2942F" opacity="0.15"/>
+      <path d="M10 8 L10 28 L14 28 L14 16 L22 16 L22 28 L26 28 L26 8 L22 8 L22 12 L14 12 L14 8 Z" fill="#F2942F"/>
+    </svg>
+    <span class="nav-logo-text">MP<span>DOORS</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Products</a></li>
+    <li><a href="#">Why MP Doors</a></li>
+    <li><a href="#">Help Center</a></li>
+    <li><a href="#">Installation</a></li>
+    <li><a href="#" class="nav-cta">Where to Buy</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-content">
+    <span class="hero-label">Available exclusively at The Home Depot</span>
+    <h1>Engineered to<br><em>outlast</em> every season.</h1>
+    <p class="hero-sub">Composite and fiberglass doors built with HydroShield Technology. Certified by Florida Building Code. Rated Best Overall by Bob Vila.</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">Shop Patio Doors &rarr;</a>
+      <a href="#" class="btn-secondary">Shop Entry Doors &rarr;</a>
+    </div>
+    <div class="hero-trust">
+      <span class="hero-trust-item">Bob Vila Best Overall</span>
+      <div class="hero-trust-sep"></div>
+      <span class="hero-trust-item">FBC Certified FL-29714</span>
+      <div class="hero-trust-sep"></div>
+      <span class="hero-trust-item">Energy Star All U.S. Zones</span>
+      <div class="hero-trust-sep"></div>
+      <span class="hero-trust-item">Lifetime Warranty on Frame</span>
+    </div>
+  </div>
+  <!-- Arc -->
+  <div class="hero-arc">
+    <div class="hero-arc-glow"></div>
+  </div>
+</section>
+
+<!-- ═══ TRUST BAR ══════════════════════════════════════ -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <svg class="trust-icon" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="trust-text"><strong>Select Models Available in 24 Hours</strong> at The Home Depot</span>
+  </div>
+  <div class="trust-item">
+    <svg class="trust-icon" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2L3 6v5c0 4.5 3 7.74 7 9 4-1.26 7-4.5 7-9V6l-7-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+    <span class="trust-text"><strong>Lifetime Limited Warranty</strong> on Frame Materials</span>
+  </div>
+  <div class="trust-item">
+    <svg class="trust-icon" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2v4M10 14v4M2 10h4M14 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+    <span class="trust-text"><strong>25+ Years</strong> Engineering Doors for American Homes</span>
+  </div>
+</div>
+
+<!-- ═══ PROBLEM STATEMENT ══════════════════════════════ -->
+<div class="problem-section">
+  <div class="problem-text">
+    <h2 class="problem-hook">"Most patio doors fail the same way."</h2>
+    <div class="problem-body">
+      <p>Moisture enters the bottom rail, trapped where you can't see it. Wood swells and rots. Vinyl warps. Steel corrodes. By the time the door sticks or gaps appear, the damage is done.</p>
+      <p>MP Doors patio doors use full composite frames that cannot absorb water — eliminating the root cause of door failure and maintaining smooth operation for decades.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT CATEGORIES ═════════════════════════════ -->
+<section class="products-section">
+  <div class="container">
+    <div class="products-header">
+      <span class="section-label">Products</span>
+      <h2 class="section-title">Find Your Door</h2>
+      <p class="section-sub">Choose by application and explore our complete selection, available at The Home Depot nationwide.</p>
+    </div>
+    <div class="product-cards">
+      <!-- Patio -->
+      <a href="#" class="product-card">
+        <div class="product-card-image">
+          <div class="product-card-glow"></div>
+          <svg class="door-svg" viewBox="0 0 140 200" fill="none">
+            <rect x="5" y="5" width="130" height="190" rx="4" fill="#1C2030" stroke="rgba(242,148,47,0.3)" stroke-width="1.5"/>
+            <rect x="12" y="12" width="56" height="176" rx="2" fill="#141828" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <rect x="72" y="12" width="56" height="176" rx="2" fill="#141828" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <rect x="16" y="20" width="48" height="80" rx="2" fill="rgba(140,180,240,0.12)" stroke="rgba(140,180,240,0.2)" stroke-width="1"/>
+            <rect x="76" y="20" width="48" height="80" rx="2" fill="rgba(140,180,240,0.12)" stroke="rgba(140,180,240,0.2)" stroke-width="1"/>
+            <rect x="16" y="108" width="48" height="70" rx="2" fill="rgba(140,180,240,0.10)" stroke="rgba(140,180,240,0.15)" stroke-width="1"/>
+            <rect x="76" y="108" width="48" height="70" rx="2" fill="rgba(140,180,240,0.10)" stroke="rgba(140,180,240,0.15)" stroke-width="1"/>
+            <circle cx="71" cy="100" r="4" fill="rgba(242,148,47,0.6)" stroke="rgba(242,148,47,0.4)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="product-card-body">
+          <div class="product-card-label">Sliding &amp; Hinged</div>
+          <h3 class="product-card-title">Patio Doors</h3>
+          <p class="product-card-desc">Composite and fiberglass doors built for coastal and humid climates. 100% waterproof frame. Smooth operation for decades.</p>
+          <span class="product-card-link">Explore Patio Doors &rarr;</span>
+        </div>
+      </a>
+      <!-- Entry -->
+      <a href="#" class="product-card">
+        <div class="product-card-image">
+          <div class="product-card-glow"></div>
+          <svg class="door-svg" viewBox="0 0 100 200" fill="none">
+            <rect x="5" y="5" width="90" height="190" rx="4" fill="#1C2030" stroke="rgba(242,148,47,0.3)" stroke-width="1.5"/>
+            <rect x="12" y="12" width="76" height="176" rx="2" fill="#141828" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <!-- Craftsman panel details -->
+            <rect x="18" y="20" width="64" height="28" rx="2" fill="rgba(140,180,240,0.15)" stroke="rgba(140,180,240,0.25)" stroke-width="1"/>
+            <rect x="18" y="56" width="64" height="28" rx="2" fill="rgba(140,180,240,0.12)" stroke="rgba(140,180,240,0.2)" stroke-width="1"/>
+            <rect x="18" y="92" width="64" height="28" rx="2" fill="rgba(140,180,240,0.12)" stroke="rgba(140,180,240,0.2)" stroke-width="1"/>
+            <rect x="18" y="128" width="64" height="50" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <rect x="68" y="100" width="10" height="10" rx="5" fill="rgba(242,148,47,0.5)" stroke="rgba(242,148,47,0.3)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="product-card-body">
+          <div class="product-card-label">Fiberglass &amp; Composite</div>
+          <h3 class="product-card-title">Entry Doors</h3>
+          <p class="product-card-desc">Beautiful wood appearance. None of wood's maintenance demands. Composite frames guaranteed against rot and warping for life.</p>
+          <span class="product-card-link">Explore Entry Doors &rarr;</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TECHNOLOGY SHOWCASE ════════════════════════════ -->
+<section class="tech-section">
+  <div class="container">
+    <span class="section-label">Engineering</span>
+    <h2 class="section-title">The Technology Behind<br>Long-Term Performance</h2>
+    <p class="section-sub" style="margin-bottom:40px">Three material innovations that solve the common door failure problems buyers face most often.</p>
+    <div class="tech-tabs">
+      <button class="tech-tab active" onclick="switchTab(0)"><span class="tech-tab-num">01</span> HydroShield</button>
+      <button class="tech-tab" onclick="switchTab(1)"><span class="tech-tab-num">02</span> Energy Efficiency</button>
+      <button class="tech-tab" onclick="switchTab(2)"><span class="tech-tab-num">03</span> Low Maintenance</button>
+    </div>
+    <div class="tech-content">
+      <!-- Panel 0: HydroShield -->
+      <div class="tech-panel active" id="tech-0" style="display:contents">
+        <div class="tech-visual">
+          <div class="tech-visual-inner">
+            <div class="tech-visual-bg"></div>
+            <!-- Animated water protection diagram -->
+            <svg width="260" height="300" viewBox="0 0 260 300" fill="none">
+              <!-- Door cross-section -->
+              <rect x="80" y="30" width="100" height="200" rx="4" fill="rgba(28,32,48,0.8)" stroke="rgba(242,148,47,0.5)" stroke-width="2"/>
+              <!-- Composite shell - all 6 sides glow -->
+              <rect x="80" y="30" width="100" height="8" fill="rgba(242,148,47,0.4)" rx="2"/>
+              <rect x="80" y="222" width="100" height="8" fill="rgba(242,148,47,0.4)" rx="2"/>
+              <rect x="80" y="30" width="8" height="200" fill="rgba(242,148,47,0.3)"/>
+              <rect x="172" y="30" width="8" height="200" fill="rgba(242,148,47,0.3)"/>
+              <!-- Interior foam -->
+              <rect x="92" y="42" width="76" height="176" rx="2" fill="rgba(140,180,255,0.08)"/>
+              <text x="130" y="134" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="9" font-family="'Plus Jakarta Sans'" letter-spacing="1">FOAM CORE</text>
+              <!-- Label -->
+              <text x="130" y="260" text-anchor="middle" fill="rgba(242,148,47,0.8)" font-size="11" font-family="'Plus Jakarta Sans'" font-weight="500">COMPOSITE BARRIER</text>
+              <text x="130" y="275" text-anchor="middle" fill="rgba(155,154,166,0.8)" font-size="10" font-family="'Plus Jakarta Sans'">6-sided moisture protection</text>
+              <!-- Animated drops -->
+              <circle class="drop" cx="50" cy="40" r="4" fill="rgba(100,180,255,0.7)"/>
+              <circle class="drop" cx="200" cy="60" r="3" fill="rgba(100,180,255,0.6)"/>
+              <circle class="drop" cx="220" cy="90" r="4" fill="rgba(100,180,255,0.7)"/>
+              <circle class="drop" cx="40" cy="110" r="3" fill="rgba(100,180,255,0.5)"/>
+              <circle class="drop" cx="210" cy="130" r="3.5" fill="rgba(100,180,255,0.6)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="tech-text-wrap">
+          <h3 class="tech-headline">100% waterproof.<br><em>All six sides.</em></h3>
+          <p class="tech-body">Moisture-resistant composite frame eliminates the rot and swelling that causes most door failures. Non-porous material tested to ASTM industry standards. The material that destroys wood and vinyl doors never gets a foothold.</p>
+          <ul class="tech-points">
+            <li><strong>Non-porous composite construction</strong> — moisture cannot penetrate any surface</li>
+            <li><strong>Patented water-resistant draining system</strong> — no pooling at the sill</li>
+            <li><strong>Lifetime warranty on frame materials</strong> — guaranteed for as long as you own your home</li>
+            <li><strong>ASTM E1886/E1996 tested</strong> — certified for windstorm areas</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Panel 1: Energy -->
+      <div class="tech-panel" id="tech-1" style="display:none">
+        <div class="tech-visual">
+          <div class="tech-visual-inner">
+            <div class="tech-visual-bg"></div>
+            <svg width="280" height="300" viewBox="0 0 280 300" fill="none">
+              <!-- Split thermal view -->
+              <rect x="20" y="60" width="110" height="160" rx="4" fill="rgba(255,100,50,0.08)" stroke="rgba(255,100,50,0.3)" stroke-width="1"/>
+              <text x="75" y="95" text-anchor="middle" fill="rgba(255,120,60,0.7)" font-size="10" font-family="'Plus Jakarta Sans'">OUTDOOR</text>
+              <text x="75" y="112" text-anchor="middle" fill="rgba(255,120,60,0.5)" font-size="9" font-family="'Plus Jakarta Sans'">Heat / Cold</text>
+              <!-- Door in middle -->
+              <rect x="120" y="40" width="40" height="200" rx="4" fill="rgba(28,32,48,0.9)" stroke="rgba(242,148,47,0.6)" stroke-width="2"/>
+              <rect x="126" y="46" width="28" height="188" rx="2" fill="rgba(100,140,220,0.15)"/>
+              <text x="140" y="148" text-anchor="middle" fill="rgba(242,148,47,0.9)" font-size="8" font-family="'Plus Jakarta Sans'" font-weight="600" letter-spacing="0.5" transform="rotate(-90 140 148)">MP DOORS</text>
+              <!-- Indoor -->
+              <rect x="150" y="60" width="110" height="160" rx="4" fill="rgba(100,140,255,0.06)" stroke="rgba(100,140,255,0.2)" stroke-width="1"/>
+              <text x="205" y="95" text-anchor="middle" fill="rgba(140,180,255,0.7)" font-size="10" font-family="'Plus Jakarta Sans'">INDOOR</text>
+              <text x="205" y="112" text-anchor="middle" fill="rgba(140,180,255,0.5)" font-size="9" font-family="'Plus Jakarta Sans'">Comfortable</text>
+              <!-- R-value badge -->
+              <rect x="90" y="255" width="100" height="28" rx="14" fill="rgba(242,148,47,0.15)" stroke="rgba(242,148,47,0.3)" stroke-width="1"/>
+              <text x="140" y="273" text-anchor="middle" fill="rgba(242,148,47,0.9)" font-size="11" font-family="'Figtree'" font-weight="700">R-5.8 vs Wood R-1.0</text>
+            </svg>
+          </div>
+        </div>
+        <div class="tech-text-wrap">
+          <h3 class="tech-headline">6× better insulation<br><em>than wood doors.</em></h3>
+          <p class="tech-body">CFC-free polyurethane foam core with Low-E argon glass. ENERGY STAR certified for all U.S. climate zones. Large door openings magnify energy loss — proper insulation makes a measurable annual difference.</p>
+          <ul class="tech-points">
+            <li><strong>R-value 5.8</strong> vs solid wood R-value 1.0 — 6× better thermal performance</li>
+            <li><strong>Tempered Low-E glass with argon fill</strong> — reduces heat transfer by ~40%</li>
+            <li><strong>ENERGY STAR qualified everywhere in the United States</strong></li>
+            <li><strong>CFC-free polyurethane foam core</strong> — stable insulation over the door's lifetime</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Panel 2: Low Maintenance -->
+      <div class="tech-panel" id="tech-2" style="display:none">
+        <div class="tech-visual">
+          <div class="tech-visual-inner">
+            <div class="tech-visual-bg"></div>
+            <svg width="280" height="300" viewBox="0 0 280 300" fill="none">
+              <!-- Split: Wood degrading vs Composite unchanged -->
+              <text x="70" y="55" text-anchor="middle" fill="rgba(200,100,60,0.8)" font-size="10" font-family="'Plus Jakarta Sans'" font-weight="500">WOOD DOOR</text>
+              <text x="210" y="55" text-anchor="middle" fill="rgba(242,148,47,0.9)" font-size="10" font-family="'Plus Jakarta Sans'" font-weight="500">MP DOORS</text>
+              <!-- Wood door deteriorating -->
+              <rect x="20" y="65" width="100" height="180" rx="4" fill="rgba(180,120,60,0.12)" stroke="rgba(200,100,60,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <path d="M30 180 Q50 165 70 175 Q90 185 110 170" stroke="rgba(200,100,60,0.4)" stroke-width="2" fill="none"/>
+              <path d="M25 200 Q45 188 65 195 Q85 202 115 190" stroke="rgba(200,100,60,0.3)" stroke-width="2" fill="none"/>
+              <text x="70" y="160" text-anchor="middle" fill="rgba(200,100,60,0.5)" font-size="28" font-family="'Figtree'" font-weight="800">5yr</text>
+              <text x="70" y="182" text-anchor="middle" fill="rgba(200,100,60,0.4)" font-size="9" font-family="'Plus Jakarta Sans'">Warped &amp; Rotting</text>
+              <!-- Composite door unchanged -->
+              <rect x="160" y="65" width="100" height="180" rx="4" fill="rgba(28,32,48,0.8)" stroke="rgba(242,148,47,0.5)" stroke-width="1.5"/>
+              <rect x="168" y="73" width="84" height="164" rx="2" fill="rgba(140,180,255,0.1)" stroke="rgba(140,180,255,0.2)" stroke-width="1"/>
+              <text x="210" y="160" text-anchor="middle" fill="rgba(242,148,47,0.8)" font-size="28" font-family="'Figtree'" font-weight="800">5yr</text>
+              <text x="210" y="182" text-anchor="middle" fill="rgba(155,154,166,0.7)" font-size="9" font-family="'Plus Jakarta Sans'">Unchanged</text>
+              <!-- VS divider -->
+              <line x1="140" y1="65" x2="140" y2="245" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="4 4"/>
+              <text x="140" y="165" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="'Figtree'" font-weight="700">VS</text>
+            </svg>
+          </div>
+        </div>
+        <div class="tech-text-wrap">
+          <h3 class="tech-headline">Clean it<br><em>twice a year.</em> That's it.</h3>
+          <p class="tech-body">Fiberglass panels won't rot or delaminate. Composite frames stay dimensionally stable across temperature extremes. Factory finish lasts for years without repainting or sealing.</p>
+          <ul class="tech-points">
+            <li><strong>Fiberglass won't rot, split, or delaminate</strong> — ever</li>
+            <li><strong>No painting or sealing required</strong> — unlike wood doors every 2–3 years</li>
+            <li><strong>Composite frames stay square</strong> — doors that fit on day one stay fitting</li>
+            <li><strong>Factory finish warranted against manufacturing defects</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REVIEWS ═════════════════════════════════════════ -->
+<section class="reviews-section">
+  <div class="container">
+    <div class="reviews-header">
+      <span class="section-label">Trusted by Homeowners Nationwide</span>
+    </div>
+    <div class="reviews-stat">
+      <span class="reviews-stars">★★★★★</span>
+      <span class="reviews-stat-text"><strong>4.6 Average Rating</strong> &nbsp;&middot;&nbsp; Based on 2,000+ verified reviews at The Home Depot</span>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-quote">Extremely happy with both the product and the installation. The door feels solid, slides smoothly, and really upgraded the look of our space.</p>
+        <div class="review-author"><strong>Sarah K. &mdash; Fort Myers, FL</strong>Verified Purchase · Patio Door</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-quote">We install a lot of doors. MP Doors mean zero callbacks. Homeowners are happy, we're happy. Very heavy duty, well-made construction throughout.</p>
+        <div class="review-author"><strong>Mike R. &mdash; Licensed Contractor</strong>Verified Purchase · Professional Installer</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-quote">Six Florida summers and this door still slides perfectly. Replaced our rotted wood door in 2019. Should have done it ten years earlier.</p>
+        <div class="review-author"><strong>Tom B. &mdash; Charleston, SC</strong>Verified Purchase · Patio Door</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ PREVIEW ════════════════════════════════════ -->
+<section class="faq-section">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start">
+      <div class="faq-header">
+        <span class="section-label">Common Questions</span>
+        <h2 class="section-title">Answers before you buy.</h2>
+        <p class="section-sub">Specific, honest answers — the same questions buyers ask most often.</p>
+        <div style="margin-top:32px">
+          <a href="#" class="btn-secondary" style="display:inline-flex">See all FAQs &rarr;</a>
+        </div>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            What makes MP Doors different from other brands at Home Depot?
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer" style="max-height:200px">
+            <div class="faq-answer-inner">Full composite frame system — not just the panel. Most brands use wood or vinyl frames where moisture damage occurs. MP Doors composite frames are non-porous and dimensionally stable. Rated Best Overall patio door by Bob Vila. Florida Building Code certified FL# FL-29714. Price-competitive with quality vinyl doors but addresses the primary cause of door replacement.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            How long do composite patio doors actually last?
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Wood patio doors in high-moisture environments commonly require replacement within 5–10 years due to bottom frame rot. Vinyl doors typically last 10–15 years but often develop warping issues. MP Doors composite frames are non-porous and dimensionally stable across temperature extremes. Backed by lifetime warranty on frame materials.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Can I install myself or do I need professional help?
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Patio doors weigh 250–350 lbs and require two people minimum. Precise leveling (within 1/16"), proper flashing, and structural anchoring are critical — installation quality directly determines long-term performance. MP Doors' pre-hung system simplifies the process, but professional installation ($400–600) is recommended for optimal results. Available through The Home Depot with trained installers.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            What does the warranty actually cover?
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Lifetime warranty (as long as you own the home): composite frame rot, warping, and degradation; fiberglass panel delamination and structural failure. Limited periods apply to glass seal (10 years), factory finish (5 years), and hardware (1 year). Contact MP Doors at 1-888-366-7717 to initiate a claim. Professional installation is strongly recommended for full warranty coverage.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HANDOFF ═════════════════════════════════════════ -->
+<div class="handoff-section">
+  <div class="handoff-inner">
+    <h2 class="handoff-title">Ready to buy?</h2>
+    <p class="handoff-sub">Take 30 seconds to confirm your choice before visiting The Home Depot — buyers who arrive knowing their model number don't get redirected.</p>
+    <div class="handoff-checklist">
+      <div class="handoff-checklist-title">Pre-visit checklist</div>
+      <div class="checklist-item"><div class="checklist-box"></div>Door type confirmed: Sliding / Hinged / Entry</div>
+      <div class="checklist-item"><div class="checklist-box"></div>Opening measured (rough opening dimensions)</div>
+      <div class="checklist-item"><div class="checklist-box"></div>Model number noted from product page</div>
+      <div class="checklist-item"><div class="checklist-box"></div>Installation method planned: DIY / HD Pro ($400–600)</div>
+    </div>
+    <div class="handoff-buttons">
+      <a href="#" class="btn-primary">Find Home Depot Location &rarr;</a>
+      <a href="#" class="btn-secondary">See Installation Gallery &rarr;</a>
+    </div>
+    <p class="handoff-phone">Questions? Call us: <a href="tel:18883667717">1-888-366-7717</a> &nbsp;Mon–Fri 9AM–5PM CST</p>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo-text">MP<span>DOORS</span></div>
+      <p class="footer-tagline">Engineering doors for American homes since 1999. Available exclusively at The Home Depot.</p>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-links-title">Products</div>
+      <ul class="footer-links">
+        <li><a href="#">Patio Doors</a></li>
+        <li><a href="#">Entry Doors</a></li>
+        <li><a href="#">Impact Doors</a></li>
+        <li><a href="#">Best-Sellers</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-links-title">Why MP Doors</div>
+      <ul class="footer-links">
+        <li><a href="#">HydroShield Technology</a></li>
+        <li><a href="#">Energy Efficiency</a></li>
+        <li><a href="#">Testing &amp; Certifications</a></li>
+        <li><a href="#">Bob Vila Recognition</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-links-title">Support</div>
+      <ul class="footer-links">
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Installation Guide</a></li>
+        <li><a href="#">Warranty</a></li>
+        <li><a href="#" style="color:#F2942F">1-888-366-7717</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2026 MP Doors / Nan-Ya Plastics Corporation USA. All rights reserved.</span>
+    <div class="footer-certs">
+      <span class="cert-badge">FL# FL-29714</span>
+      <span class="cert-badge">Energy Star</span>
+      <span class="cert-badge">ASTM Tested</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Tech tabs
+  const panels = ['tech-0','tech-1','tech-2'];
+  function switchTab(idx) {
+    document.querySelectorAll('.tech-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+    panels.forEach((id,i) => {
+      const el = document.getElementById(id);
+      el.style.display = i===idx ? 'contents' : 'none';
+    });
+  }
+
+  // FAQ accordion
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(it => {
+      it.classList.remove('open');
+      it.querySelector('.faq-answer').style.maxHeight = '0';
+    });
+    // Open clicked if was closed
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  }
+  // Init open item
+  document.querySelector('.faq-item.open .faq-answer').style.maxHeight = '200px';
+</script>
+</body>
+</html>
